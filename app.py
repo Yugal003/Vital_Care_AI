@@ -1,5 +1,6 @@
 # Import necessary libraries
 import streamlit as st 
+import os
 import google.generativeai as genai
 from PIL import Image
 import time
@@ -44,13 +45,12 @@ st.subheader("AI-Powered Medical Image Analysis")
 st.markdown("---")
 
 # API Setup
-try:
-    from api_key import api_key
-    genai.configure(api_key=api_key)
-except Exception as e:
-    st.error(f"❌ API configuration failed: {e}")
-    st.info("Please ensure you have a valid 'api_key.py' file with your Google AI Studio API key.")
+api_key = os.getenv("API_KEY")
+if not api_key:
+    st.error("❌ API key not found! Please set API_KEY as an environment variable.")
     st.stop()
+
+genai.configure(api_key=api_key)
 
 # Model setup
 @st.cache_resource
